@@ -1,0 +1,31 @@
+{
+  "name": "employee-management-cli",
+  "version": "1.0.0",
+  "description": "Employee management system",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mc4506/employee-management-CLI.git"
+  },
+  "keywords": [
+    "CMS",
+    "employee",
+    "inquirier",
+    "console.table",
+    "mysql"
+  ],
+  "author": "mc4506",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mc4506/employee-management-CLI/issues"
+  },
+  "homepage": "https://github.com/mc4506/employee-management-CLI#readme",
+  "dependencies": {
+    "console.table": "^0.10.0",
+    "inquirer": "^7.3.3",
+    "mysql": "^2.18.1"
+  }
+}
