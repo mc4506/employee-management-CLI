@@ -1,4 +1,4 @@
-INSERT INTO department (name) 
+INSERT INTO department (dept_name) 
 VALUES 
 ("HR"), -- id 1
 ("Accounting"), -- id 2 
@@ -14,7 +14,7 @@ VALUES
 ("Assistant HR", 100000.00, 1), -- id 4
 ("Accountant", 90000, 2), -- id 5
 ("Receptionist", 50000, 4), -- id 6
-("Admin Staff", 60000, 4), -- id 7
+("Administrator", 60000, 4), -- id 7
 ("Project Manager", 150000, 3), -- id 8
 ("Senior Engineer", 125000, 3), -- id 9
 ("Engineer", 100000, 3); -- id 10
