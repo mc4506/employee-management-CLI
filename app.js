@@ -88,20 +88,19 @@ const displayMainMenu = () => {
 
 const addEmployee = (first, last, role, manager) => {
 
-    let queryString = 
-        {
-            id: 0,
-            first_name: first,
-            last_name: last,
-            role_id: parseInt(role),
-            manager_id: (manager === undefined) ? undefined : parseInt(manager)
-        };
+    let queryString = {
+        id: 0,
+        first_name: first,
+        last_name: last,
+        role_id: parseInt(role),
+        manager_id: (manager === undefined) ? undefined : parseInt(manager)
+    };
 
     db.query(`INSERT INTO employee SET ?`, [queryString],
-    (err, res) => {
-        if(err) throw err;
-        console.log("Successfully added a new employee");
-    })
+        (err, res) => {
+            if (err) throw err;
+            console.log("Successfully added a new employee");
+        })
 }
 
 const addEmployeeMenu = () => {
@@ -125,7 +124,9 @@ const addEmployeeMenu = () => {
                     value: e
                 }
             });
-            managers.push({value: "NONE"});
+            managers.push({
+                value: "NONE"
+            });
 
             inquirer.prompt([{
                     type: "input",
@@ -153,7 +154,7 @@ const addEmployeeMenu = () => {
             ]).then(response => {
                 // console.log(response);
                 addEmployee(response.first_name, response.last_name, response.role_id.id, response.manager_id.id);
-            }).then( () => {
+            }).then(() => {
                 setTimeout(displayMainMenu, 2000);
             });
         });
@@ -164,34 +165,67 @@ const addEmployeeMenu = () => {
 
 
 const addDept = () => {
-    inquirer.prompt([{
-            type: "input",
-            message: "Enter the New Department Name.",
-            name: "name",
-        },
+    console.log("\nAdd New Department");
+    console.log("------------------");
 
-    ])
+    inquirer.prompt([{
+        type: "input",
+        message: "Enter the New Department Name.",
+        name: "name",
+    }, ]).then(response => {
+        db.query("INSERT INTO department SET ?", [{
+            id: 0,
+            dept_name: response.name
+        }], (err, res) => {
+            if (err) throw err;
+            console.log("Successfully added a new department");
+            setTimeout(displayMainMenu, 2000);
+        })
+    })
 }
 
 const addRole = () => {
-    inquirer.prompt([{
-            type: "input",
-            message: "Enter Name of New Title.",
-            name: "title",
-        },
-        {
-            type: "number",
-            message: "Enter Salary for New Title. ($)", // validation
-            name: "salary",
-        },
-        {
-            type: "list",
-            message: "Select Department this Role will work in.",
-            choices: [],
-            name: "department_id"
-        },
+    console.log("\nAdd New Position");
+    console.log("------------------");
 
-    ])
+    db.query("SELECT id, dept_name FROM department;", (err, res) => {
+        if (err) throw err;
+        let departments = res.map(e => {
+            return {
+                name: e.dept_name,
+                value: e
+            }
+        });
+
+        inquirer.prompt([{
+                type: "input",
+                message: "Enter Name of New Position.",
+                name: "title",
+            },
+            {
+                type: "number",
+                message: "Enter Salary for New Position. ($)", // validation
+                name: "salary",
+            },
+            {
+                type: "list",
+                message: "Select Department this Position will work in.",
+                choices: departments,
+                name: "department_id"
+            },
+        ]).then(response => {
+            db.query("INSERT INTO role SET ?", [{
+                id: 0,
+                title: response.title,
+                salary: response.salary,
+                department_id: response.department_id.id
+            }], (err, res) => {
+                if (err) throw err;
+                console.log("Successfully added a new role");
+                setTimeout(displayMainMenu, 2000);
+            })
+        })
+    })
 };
 
 const viewEmployees = () => {
