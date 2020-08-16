@@ -87,15 +87,13 @@ const getEmployees = async () => {
 
 const backToMainMenu = () => {
     console.log("\n");
-    inquirer.prompt([
-        {
-            type: "list",
-            message: "",
-            choices: ["<= Back to Main Menu"],
-            name: "back"
-        }
-    ]).then( response => {
-        if(response) displayMainMenu();
+    inquirer.prompt([{
+        type: "list",
+        message: "",
+        choices: ["<= Back to Main Menu"],
+        name: "back"
+    }]).then(response => {
+        if (response) displayMainMenu();
     })
 }
 
@@ -286,41 +284,33 @@ const addRole = async () => {
 };
 
 const viewEmployees = () => {
-    db.query("SELECT employee.id, first_name, last_name, title, dept_name FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id",
-        (err, res) => {
-            if (err) throw err;
-            console.clear();
-            console.log("*** press UP or DOWN to return to Main Menu ***\n\n");
-            console.table(res);
-            backToMainMenu();
-        }
-    );
+    promiseQuery(queryEmployee).then(res => {
+        console.clear();
+        console.log("Employees");
+        console.log("---------\n");
+        console.table(res);
+        backToMainMenu();
+    });
 };
 
 const viewRoles = () => {
-    db.query("SELECT role.id, title, salary, dept_name FROM role LEFT JOIN department ON role.department_id = department.id;",
-        (err, res) => {
-            if (err) throw err;
-            console.clear();
-            console.log("*** press UP or DOWN to return to Main Menu ***\n\n");
-            console.table(res);
-            backToMainMenu();
-        }
-    );
-    // displayMainMenu();
+    promiseQuery(queryRole).then(res => {
+        console.clear();
+        console.log("Employee Roles");
+        console.log("--------------\n");
+        console.table(res);
+        backToMainMenu();
+    });
 };
 
 const viewDepts = () => {
-    db.query("SELECT id, dept_name FROM department;",
-        (err, res) => {
-            if (err) throw err;
-            console.clear();
-            console.log("*** press UP or DOWN to return to Main Menu ***\n\n");
-            console.table(res);
-            backToMainMenu();
-        }
-    );
-    // displayMainMenu();
+    promiseQuery(queryDept).then(res => {
+        console.clear();
+        console.log("Departments");
+        console.log("-----------\n");
+        console.table(res);
+        backToMainMenu();
+    });
 };
 
 const viewByManager = async () => {
@@ -341,12 +331,10 @@ const viewByManager = async () => {
             (err, res) => {
                 if (err) throw err;
                 console.clear();
-                console.log("*** press UP or DOWN to return to Main Menu ***\n\n");
                 console.log(`Employees managed by ${response.manager.first_name} ${response.manager.last_name}`);
                 console.table(res);
                 backToMainMenu();
-            })
-        // displayMainMenu();
+            });
     });
 };
 
@@ -521,7 +509,7 @@ const deleteDept = async () => {
             // setTimeout(displayMainMenu, 2000);
             backToMainMenu();
         })
-    }); 
+    });
 };
 
 const exitProgram = () => {
