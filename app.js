@@ -201,6 +201,11 @@ const addEmployeeMenu = async () => {
             type: "input",
             message: "Enter the First Name.",
             name: "first_name",
+            validate: input => {
+                const validName = /^[a-zA-Z]+([\ A-Za-z\'\-]+)*/i;
+                if (validName.test(input)) return true;
+                return "Please enter a valid name.";
+            },
         },
         {
             type: "input",
@@ -223,7 +228,7 @@ const addEmployeeMenu = async () => {
     ]).then(response => {
         addEmployee(response.first_name, response.last_name, response.role_id.id, response.manager_id.id);
     }).then(() => {
-        setTimeout(displayMainMenu, 2000);
+        backToMainMenu();
     });
 }
 
@@ -235,6 +240,11 @@ const addDept = () => {
         type: "input",
         message: "Enter the New Department Name.",
         name: "name",
+        validate: input => {
+            const validName = /^[a-zA-Z0-9]+([\ A-Za-z0-9\'\-]+)*/i;
+            if (validName.test(input)) return true;
+            return "Please enter a valid name.";
+        },
     }, ]).then(response => {
         promiseQuery("INSERT INTO department SET ?", [{
             id: 0,
@@ -257,11 +267,21 @@ const addRole = async () => {
             type: "input",
             message: "Enter Name of New Role.",
             name: "title",
+            validate: input => {
+                const validName = /^[a-zA-Z0-9]/i;
+                if (validName.test(input)) return true;
+                return "Please enter a valid name.";
+            },
         },
         {
             type: "number",
             message: "Enter Salary for New Role. ($)", // validation
             name: "salary",
+            validate: input => {
+                const validNumber = /^[0-9]+(\.[0-9][0-9])?/;
+                if (validNumber.test(input)) return true;
+                return "Please enter a valid salary";
+            }
         },
         {
             type: "list",
